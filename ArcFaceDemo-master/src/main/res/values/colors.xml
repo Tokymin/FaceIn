@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="whites">#ffffff</color>
+    <color name="radio">#d1e9fb</color>
+    <color name="colorPrimaryDark">#77c9d4</color>
+    <color name="colorPrimary">#77c9d4</color>
+    <color name="colorAccent">#0a0606</color>
+    <color name="colorOrigin">#A5A5Af</color>
+    <color name="colorBackground">#ffffff</color>
+    <color name="color_radiobutton">#ff4081</color>
+    <color name="font_value">#ff888271</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="timestampline">#ffe5e1de</color>
+    <color name="text_color">#ff434343</color>
+    <color name="msg_emotebar_backgroud">#ff73797d</color>
+    <color name="msg_emotebar_item_press">#ff3b3e40</color>
+    <color name="msg_emotebar_item_selected">#ffececec</color>
+    <color name="devide_line">#CBCED2</color>
+    <color name="background_normal">#fffffbf0</color>
+    <color name="background_normal_press">#ffece7da</color>
+    <color name="background_normal_selected">#fffff2ab</color>
+    <color name="item_divider">#fafafa</color>
+    <color name="item_common_pressed">#e0e0e0</color>
+    <color name="item_common_selected">#5e5e5e</color>
+    <color name="background_common">#fafafa</color>
+    <color name="background_menu_divider">#d0d0d0</color>
+    <color name="background_menu">#e0e0e0</color>
+    <color name="font_default">#222222</color>
+    <color name="font_light">#777777</color>
+    <color name="trans222">#00000000</color>
+    <color name="white">#fffefe</color>
+    <color name="white_light">#888888</color> <!-- 淡白色 -->
+    <color name="darkorange">#20c36e</color>
+    <color name="black">#000000</color>
+    <color name="gray">#FFDBDBDB</color>
+    <color name="red">#FF0000</color>
+    <color name="darkgray">#50808080</color>
+    <color name="blue">#06090a</color>
+    <color name="green">#008000</color> <!-- 绿色 -->
+    <color name="green1">#8dce3f</color> <!-- 绿色 -->
+    <color name="orange">#eb923e</color>
+    <color name="lightblue">#36c77b</color>
+    <color name="transparent_gray">#8000</color>
+    <color name="transparent">#00796868</color>
+    <color name="msg_plus_item_press">#ff1d1d1d</color>
+    <color name="dialog_listitem_press">#ffd0dce4</color>
+    <color name="download_progressbar_bg">#4c000000</color>
+    <color name="gender_famal">#ffffaed8</color>
+    <color name="bg_headerbar_spinner_normal">@color/transparent</color>
+    <color name="bg_headerbar_spinner_selected">#5f000000</color>
+    <color name="bg_headerbar_spinner_press">#7f000000</color>
+    <color name="msg_status_new">#fffff2cc</color>
+    <color name="msg_status_new_stroke">#ffff9b2f</color>
+    <color name="msg_status_read">#ff82c85f</color>
+    <color name="msg_status_sent">#ffeb7837</color>
+    <color name="msg_status_sending">#ff50a5c3</color>
+    <color name="bg_sitespan">#ffece7d9</color>
+    <color name="bg_sitespan_press">#ffe0dbce</color>
+    <color name="text_selected_color">#ffff9f08</color>
+    <color name="text_press_color">#ffff4b08</color>
+    <color name="bg_tips_normal">#ffe3ded0</color>
+    <color name="bg_tips_press">#ffccc8bc</color>
+    <color name="background_undercard">#ffe4e2d7</color>
+    <color name="background_undercard_press">#ffe0d7c9</color>
+    <!-- A light Holo shade of blue -->
+    <color name="holo_blue_light">#36c77b</color>
+    <!-- A light Holo shade of green -->
+    <color name="holo_green_light">#36c77b</color>
+    <!-- A really bright Holo shade of blue -->
+    <color name="holo_blue_bright">#36c77b</color>
+    <color name="today">#ffff3e45</color>
+    <color name="lightgrey">#D3D3D3</color> <!-- 亮灰色 -->
+    <color name="dimgray">#696969</color> <!-- 暗灰色 -->
+    <color name="dimgrey">#696969</color> <!-- 暗灰色 -->
+
+    <color name="calendar_event">#999999</color>
+    <color name="dialogColor">#f0ffffff</color>
+    <color name="dialog_gray">#e6e6e6</color>
+    <color name="black1">#333333</color>
+    <color name="black2">#666666</color>
+    <color name="indexcshape0">#fe8a7f</color>
+    <color name="indexcshape1">#b9a571</color>
+    <color name="indexcshape2">#71b9a5</color>
+    <color name="indexcshape3">#719bb8</color>
+    <color name="indexcshape4">#a15679</color>
+    <color name="top_title_green">#8DCE3F</color>
+    <color name="rippelColor">#FFFFFF</color>
+    <color name="focus_circle_bg">#F24949</color>
+    <color name="date_1">#F24949</color>
+    <color name="date_2">#40000000</color>
+    <color name="Grey">#bebebe</color>
+    <color name="LightGray">#d3d3d3</color>
+    <color name="gray1">#eaeaea</color> <!-- 灰色 -->
+
+    <color name="header_bg">#FCFCFB</color>
+    <color name="calendar_title_bg">#E8E8E7</color>
+    <color name="calendar_text">#75B174</color>
+    <color name="calendar_class_title_bg">#F2F2F2</color>
+
+    <!-- 文字颜色 -->
+    <color name="titleTextColor">#75B174</color> <!-- 深绿色 -->
+    <color name="textColor">#7cbd7b</color> <!-- 深绿色 -->
+    <color name="textColor_g">#64a461</color> <!-- 深绿色 -->
+    <color name="textColor1">#777878</color> <!-- 深灰色 -->
+    <color name="textColor_black">#646262</color> <!-- 黑色 -->
+    <color name="textColor_black1">#9b9999</color>
+    <color name="textColor_black2">#646464</color> <!-- 浅黑色 -->
+    <color name="textColor_black3">#939493</color>
+    <color name="textColor_o">#eeb886</color> <!-- 橙色 -->
+    <color name="textColor_gray">#999999</color> <!-- 灰色 -->
+    <color name="textColorwhite">#f9f9f9</color>
+    <color name="week_view_black">#9db8b3</color>
+    <color name="week_view_green">#96d095</color> <!-- 深绿色 -->
+
+    <!-- 背景色 -->
+    <color name="delete_user_bg">#ff9090</color>
+    <color name="tel_phone_bg">#eceaea</color>
+    <color name="send_msg_bg">#dddddd</color>
+    <color name="sky">#0f66fe</color>
+    <color name="top_bg_color">#75B174</color>
+    <color name="teacher_info_bg">#E6E7E8</color>
+    <color name="index_bg">#E4E5E6</color>
+    <color name="teacher_index_bg">#f7f7f7</color>
+    <color name="line">#a5a5a5</color>
+    <color name="mine_bg">#f5f5f5</color>
+    <color name="milk_white">#FCFCFB</color>
+    <color name="ui_bg">#F9F9F9</color>
+    <color name="course_notes_bg">#dbe0db</color>
+
+    <!-- 用于显示有疑问的字体的颜色 -->
+    <color name="have_question">#8AC389</color>
+
+    <!-- 用于使用popopwindow的背景颜色 -->
+    <color name="half_black">#01000000</color>
+    <color name="dialog_divider">#ffbfcbd3</color>
+    <color name="notes_color">#ff777777</color>
+    <color name="devideline">#ffd0c9b8</color>
+
+
+    <color name="global_bg">#9000</color>
+    <color name="color_green_01d9ae">#01D9AE</color>
+    <color name="color_blue_0888ff">#0888ff</color>
+    <color name="color_gray_d9d9d9">#d9d9d9</color>
+    <color name="action_bar_tittle_color_555555">#555555</color>
+    <color name="grey_white_has_alpha">#66FAFAFA</color>
+    <color name="color_network_bar_bg_ee4b62">#ee4b62</color>
+    <color name="color_black_333333">#333333</color>
+    <color name="color_grey_999999">#999999</color>
+    <color name="color_grey_888888">#888888</color>
+    <color name="color_grey_666666">#666666</color>
+    <color name="color_activity_blue_bg">#f7389fff</color>
+    <color name="split_line_grey_color_d9d9d9">#D9D9D9</color>
+    <color name="green_4DC0A4">#4DC0A4</color>
+    <color name="gray7">#c5c4c4</color>
+    <color name="GreyWhite">#F7F7F7</color>
+    <color name="im_list_select_hover">#dbdbdb</color>
+    <color name="color_aaaaaa_content_text">#ffaaaaaa</color>
+    <color name="title_color_01d9ae">#01D9AE</color>
+    <color name="color_b3b3b3">#b3b3b3</color>
+    <color name="color_green_disable">#a2efe0</color>
+    <color name="color_green_00d3a9">#ff00D3A9</color>
+    <color name="color_red_ccfa3c55">#ccfa3c55</color>
+    <color name="color_black_b3000000">#b3000000</color>
+    <color name="color_white_66ffffff">#66ffffff</color>
+    <color name="color_grey_eaeaea">#eaeaea</color>
+    <color name="color_yellow_fcf3cd">#fcf3cd</color>
+    <color name="color_blue_3a9efb">#3a9efb</color>
+    <color name="color_green_89fbff">#89fbff</color>
+
+    <!-- main bg color -->
+    <color name="g_child_page_bg_color">#FFFFFF</color>
+    <color name="main_bg_color">#FFFFFF</color>
+
+    <!-- session -->
+    <color name="color_message_default_bg">#e9ecf0</color>
+    <color name="input_panel_text_color_757572">#757572</color>
+    <color name="color_gray_cbd0d8">#cbd0d8</color>
+    <color name="help_color">#ff999999</color>
+
+    <!-- image picker -->
+    <color name="color_split_line_d9d9d9">#d9d9d9</color>
+    <color name="color_split_line_cccccc">#cccccc</color>
+
+    <!-- contact -->
+    <color name="contact_list_hover">#d9d9d9</color>
+    <color name="contact_letter_idx_bg">#33000000</color>
+    <color name="contacts_letters_color">#80807c</color>
+    <color name="bussiness_card_gridview_bg">#ECF1F5</color>
+    <color name="press_mask">#33000000</color>
+    <color name="color_grey_ababab">#ababab</color>
+    <color name="color_yellow_796413">#796413</color>
+    <color name="color_yellow_b39729">#b39729</color>
+    <color name="color_red_f04c62">#f04c62</color>
+
+    <!-- setting -->
+    <color name="color_black_ff333333">#ff333333</color>
+    <color name="color_black_ff666666">#ff666666</color>
+    <color name="color_black_ff999999">#ff999999</color>
+    <color name="color_gray_bfc2c5">#bfc2c5</color>
+</resources>

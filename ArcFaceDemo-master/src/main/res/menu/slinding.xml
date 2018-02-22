@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_sys"
+        android:orderInCategory="100"
+        android:title="@string/sao"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_tj"
+        android:orderInCategory="100"
+        android:title="@string/tj"
+        app:showAsAction="never" />
+
+</menu>

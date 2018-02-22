@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/v5_3_0_guide_pic1"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:drawable/divider_horizontal_dark"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="          " />
+
+            <com.arcsoft.sdk_demo.View.MyListView
+                android:id="@+id/mylistview_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_default_round"
+                android:cacheColorHint="#00000000" />
+
+            <com.arcsoft.sdk_demo.View.MyListView
+                android:id="@+id/mylistview_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/list_default_round"
+                android:cacheColorHint="#00000000" />
+
+            <com.arcsoft.sdk_demo.View.MyListView
+                android:id="@+id/mylistview_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/list_default_round"
+                android:cacheColorHint="#00000000" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

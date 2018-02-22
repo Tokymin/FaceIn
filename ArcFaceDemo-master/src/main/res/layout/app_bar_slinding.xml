@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <!--tools:context="com.arcsoft.sdk_demo.Activity.SlindingActivity"-->
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appBarLayout">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#77c9d4"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/line"
+        android:layout_alignParentStart="true" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:layout_above="@+id/radioGroup"
+        android:background="#bfbfbf" />
+    <RadioGroup
+        android:background="@color/radio"
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="3dp">
+
+        <RadioButton
+            android:id="@+id/rb_home"
+            style="@style/RadioButtonStyle"
+            android:checked="true"
+            android:drawableTop="@drawable/btn_1"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/rb_table"
+            style="@style/RadioButtonStyle"
+            android:drawableTop="@drawable/btn_2"
+            android:text="我的课表"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/rb_communi"
+            style="@style/RadioButtonStyle"
+            android:drawableTop="@drawable/btn_3"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+        <RadioButton
+            android:id="@+id/rb_more"
+            style="@style/RadioButtonStyle"
+            android:drawableTop="@drawable/btn_4"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+    </RadioGroup>
+
+</RelativeLayout>
