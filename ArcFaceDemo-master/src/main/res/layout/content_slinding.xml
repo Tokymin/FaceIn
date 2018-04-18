@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.arcsoft.sdk_demo.Activity.SlindingActivity"
+    tools:context="com.arcsoft.demo.Activity.SlindingActivity"
     tools:showIn="@layout/app_bar_slinding"
     android:background="#cccccc"
     android:id="@+id/viewPager">

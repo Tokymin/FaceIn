@@ -6,7 +6,7 @@
     android:orientation="vertical"
    >
 
-    <com.arcsoft.sdk_demo.View.CourseTableView
+    <com.arcsoft.demo.View.CourseTableView
         android:id="@+id/ctv"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

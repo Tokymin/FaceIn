@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.arcsoft.sdk_demo"
+    package="com.arcsoft.demo"
     android:installLocation="auto">
-
-
     <uses-permission android:name="com.arcsoft.sdk_demo.permission.RECEIVE_MSG"/>
     <!-- 网络相关 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,61 +17,21 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!-- 多媒体 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <!-- 手机状态 -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- SDK权限申明, 第三方APP接入时，请将com.netease.nim.demo替换为自己的包名 -->
-    <!-- 和下面的uses-permission一起加入到你的AndroidManifest文件中。 -->
-    <permission
-        android:name="com.arcsoft.sdk_demo.permission.RECEIVE_MSG"
-        android:protectionLevel="signature"
-        tools:ignore="UniquePermission" />
-
-    <!-- 接受SDK消息广播权限， 第三方APP接入时，请将com.netease.nim.demo替换为自己的包名 -->
-    <uses-permission android:name="com.arcsoft.sdk_demo.permission.RECEIVE_MSG" />
-
-    <!-- 小米推送 -->
-    <permission
-        android:name="com.arcsoft.sdk_demo.permission.MIPUSH_RECEIVE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.netease.nim.demo.permission.MIPUSH_RECEIVE" />
-
-    <!--魅族推送-->
-
-    <!-- 兼容flyme5.0以下版本，魅族内部集成pushSDK必填，不然无法收到消息-->
-    <uses-permission android:name="com.meizu.flyme.push.permission.RECEIVE" />
-    <permission android:name="com.arcsoft.sdk_demo.push.permission.MESSAGE"
-        android:protectionLevel="signature"/>
-    <uses-permission android:name="com.arcsoft.sdk_demo.push.permission.MESSAGE" />
     <!--  兼容flyme3.0配置权限-->
     <uses-permission android:name="com.meizu.c2dm.permission.RECEIVE" />
-    <permission android:name="com.arcsoft.sdk_demo.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
     <uses-permission android:name="com.arcsoft.sdk_demo.permission.C2D_MESSAGE"/>
     <application
-        android:name=".MyApplication"
+        android:name="com.arcsoft.demo.Application"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -81,6 +39,7 @@
 
         <meta-data
             android:name="com.netease.nim.appKey"
+
             android:value="45c6af3c98409b18a84451215d0bdd6e" />
 
         <uses-library
@@ -108,47 +67,47 @@
 
         <!-- 多端登录管理 -->
         <activity
-            android:name=".main.activity.MultiportActivity"
+            android:name="com.arcsoft.demo.main.activity.MultiportActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
-        <activity android:name=".PermissionAcitivity">
+        <activity android:name="com.arcsoft.demo.PermissionAcitivity">
         </activity>
-        <activity android:name=".DetecterActivity">
+        <activity android:name="com.arcsoft.demo.DetecterActivity">
 
         </activity>
         <activity
-            android:name=".Activity.MainActivity"
+            android:name="com.arcsoft.demo.Activity.MainActivity"
             android:theme="@style/FullscreenTheme">
 
         </activity>
         <!-- 主界面 -->
         <activity
-            android:name=".main.activity.MainActivity"
+            android:name="com.arcsoft.demo.main.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".RegisterActivity">
+        <activity android:name="com.arcsoft.demo.RegisterActivity">
 
         </activity>
-        <activity android:name=".RegisterActivity1">
+        <activity android:name="com.arcsoft.demo.RegisterActivity1">
 
         </activity>
-        <activity android:name=".Activity.WelcomeActivity">
+        <activity android:name="com.arcsoft.demo.Activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.Guide">
+        <activity android:name="com.arcsoft.demo.Activity.Guide"
 
-
+            >
             <intent-filter>
                 <action android:name="android.media.action.IMAGE_CAPTURE" />
 
@@ -156,46 +115,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.SlindingActivity"
+            android:name="com.arcsoft.demo.Activity.SlindingActivity"
             android:label="@string/title_activity_slinding"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
-        <activity
-            android:name=".Activity.SettingsActivity"
-            android:label="@string/title_activity_settings">
-
-        </activity>
 
         <activity
-            android:name=".main.activity.SettingsActivity"
+            android:name="com.arcsoft.demo.main.activity.SettingsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity
-            android:name=".Activity.SaomiaoActivity"
+            android:name="com.arcsoft.demo.Activity.SaomiaoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_saomiao"
             android:theme="@style/FullscreenTheme">
 
         </activity>
 
-        <activity
-            android:name=".Activity.UpdateInforActivity"
-            android:label="@string/title_activity_update_infor">
-
-        </activity>
-        <activity android:name=".Activity.NewsdetailActivity" />
-        <activity android:name=".Activity.NoteActivity" />
-        <activity android:name=".Activity.NoteEdit" />
-        <activity android:name=".Activity.ZhuTiActivity" />
-        <activity android:name=".Activity.ListView1" />
+        <activity android:name="com.arcsoft.demo.Activity.NewsdetailActivity" />
+        <activity android:name="com.arcsoft.demo.Activity.NoteActivity" />
+        <activity android:name="com.arcsoft.demo.Activity.NoteEdit" />
+        <activity android:name="com.arcsoft.demo.Activity.NewsActivity" />
+        <activity android:name="com.arcsoft.demo.Activity.ListView1" />
 
         <!-- 关于 -->
         <activity
-            android:name=".main.activity.AboutActivity"
+            android:name="com.arcsoft.demo.main.activity.AboutActivity"
             android:configChanges="orientation"
             android:label="@string/about"
             android:screenOrientation="portrait"
@@ -204,42 +153,42 @@
 
 
         <activity
-            android:name=".main.activity.NoDisturbActivity"
+            android:name="com.arcsoft.demo.main.activity.NoDisturbActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name=".contact.activity.AddFriendActivity"
+            android:name="com.arcsoft.demo.contact.activity.AddFriendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name=".contact.activity.UserProfileActivity"
+            android:name="com.arcsoft.demo.contact.activity.UserProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name=".contact.activity.UserProfileSettingActivity"
+            android:name="com.arcsoft.demo.contact.activity.UserProfileSettingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name=".contact.activity.UserProfileEditItemActivity"
+            android:name="com.arcsoft.demo.contact.activity.UserProfileEditItemActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name=".contact.activity.BlackListActivity"
+            android:name="com.arcsoft.demo.contact.activity.BlackListActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -247,7 +196,7 @@
 
         <!-- 文件管理器 -->
         <activity
-            android:name=".file.browser.FileBrowserActivity"
+            android:name="com.arcsoft.demo.file.browser.FileBrowserActivity"
             android:configChanges="orientation"
             android:label="@string/file_browser"
             android:screenOrientation="portrait"
@@ -255,46 +204,46 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
 
         <activity
-            android:name=".main.activity.SystemMessageActivity"
+            android:name="com.arcsoft.demo.main.activity.SystemMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".main.activity.CustomNotificationActivity"
+            android:name="com.arcsoft.demo.main.activity.CustomNotificationActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".session.activity.MessageHistoryActivity"
+            android:name="com.arcsoft.demo.session.activity.MessageHistoryActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".session.activity.MessageInfoActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-
-        <activity
-            android:name=".team.activity.AdvancedTeamSearchActivity"
+            android:name="com.arcsoft.demo.session.activity.MessageInfoActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
-            android:name=".team.activity.AdvancedTeamJoinActivity"
+            android:name="com.arcsoft.demo.team.activity.AdvancedTeamSearchActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
-            android:name=".main.activity.TeamListActivity"
+            android:name="com.arcsoft.demo.team.activity.AdvancedTeamJoinActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name="com.arcsoft.demo.main.activity.TeamListActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -302,45 +251,45 @@
 
         <!-- 全局搜索 -->
         <activity
-            android:name=".main.activity.GlobalSearchActivity"
+            android:name="com.arcsoft.demo.main.activity.GlobalSearchActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/global_search_bg"
             android:windowSoftInputMode="stateUnspecified" />
 
         <activity
-            android:name=".main.activity.GlobalSearchDetailActivity"
+            android:name="com.arcsoft.demo.main.activity.GlobalSearchDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".main.activity.GlobalSearchDetailActivity2"
+            android:name="com.arcsoft.demo.main.activity.GlobalSearchDetailActivity2"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 查看阅后即焚 -->
         <activity
-            android:name=".session.activity.WatchSnapChatPictureActivity"
+            android:name="com.arcsoft.demo.session.activity.WatchSnapChatPictureActivity"
             android:configChanges="keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- 下载文件 -->
         <activity
-            android:name=".session.activity.FileDownloadActivity"
+            android:name="com.arcsoft.demo.session.activity.FileDownloadActivity"
             android:configChanges="keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- map -->
         <activity
-            android:name=".location.activity.LocationAmapActivity"
+            android:name="com.arcsoft.demo.location.activity.LocationAmapActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/location_map"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".location.activity.NavigationAmapActivity"
+            android:name="com.arcsoft.demo.location.activity.NavigationAmapActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/location_navigate"
             android:screenOrientation="portrait"
@@ -348,7 +297,7 @@
 
         <!-- 白板 -->
         <activity
-            android:name=".rts.activity.RTSActivity"
+            android:name="com.arcsoft.demo.rts.activity.RTSActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -356,14 +305,14 @@
 
         <!-- 消息历史搜索 -->
         <activity
-            android:name=".session.search.SearchMessageActivity"
+            android:name="com.arcsoft.demo.session.search.SearchMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/global_search_bg"
             android:windowSoftInputMode="adjustPan|stateUnspecified" />
 
         <activity
-            android:name=".session.search.DisplayMessageActivity"
+            android:name="com.arcsoft.demo.session.search.DisplayMessageActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -371,13 +320,13 @@
 
         <!-- 聊天室 -->
         <activity
-            android:name=".chatroom.activity.ChatRoomActivity"
+            android:name="com.arcsoft.demo.chatroom.activity.ChatRoomActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <activity
-            android:name=".jsbridge.JsBridgeActivity"
+            android:name="com.arcsoft.demo.jsbridge.JsBridgeActivity"
             android:label="@string/js_bridge"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
@@ -385,14 +334,15 @@
 
         <!-- 机器人 -->
         <activity
-            android:name=".main.activity.RobotListActivity"
+            android:name="com.arcsoft.demo.main.activity.RobotListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".contact.activity.RobotProfileActivity"
+            android:name="com.arcsoft.demo.contact.activity.RobotProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.CoursedetailActivity" />
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -431,14 +381,14 @@
         <!-- android:authorities="{包名}.ipc.provider", 请将com.netease.nim.demo替换为自己的包名 -->
         <provider
             android:name="com.netease.nimlib.ipc.NIMContentProvider"
-            android:authorities="com.arcsoft.sdk_demo.ipc.provider"
+            android:authorities="com.arcsoft.demo.ipc.provider"
             android:exported="false"
             android:process=":core" />
 
         <!-- 申明自定义通知的广播接收器，第三方APP集成时，action中的com.netease.nim.demo请替换为自己的包名 -->
         <!-- 需要权限申明 <uses-permission android:name="com.netease.nim.demo.permission.RECEIVE_MSG"/> -->
         <receiver
-            android:name=".receiver.CustomNotificationReceiver"
+            android:name="com.arcsoft.demo.receiver.CustomNotificationReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

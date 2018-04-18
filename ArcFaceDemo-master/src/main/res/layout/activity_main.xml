@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="top"
     android:orientation="vertical"
-    tools:context="com.arcsoft.sdk_demo.Activity.MainActivity">
+    tools:context="com.arcsoft.demo.Activity.MainActivity">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -43,7 +43,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="69dp"
                 android:layout_height="wrap_content"
-                android:text="记住密码"
+                android:text="@string/rember"
                 android:textAlignment="center"
                 android:textColor="@color/Grey"
                 android:textSize="14sp" />

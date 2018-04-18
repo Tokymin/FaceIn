@@ -7,10 +7,10 @@
         android:bottomLeftRadius="8px"
         android:bottomRightRadius="8px"
         />
-
+    <solid android:color="#80FFFFFF" /><!--填充色-->
     <stroke
         android:width="4px"
-        android:color="#606269"
+        android:color="#ffffff"
         />
 
 </shape>

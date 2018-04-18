@@ -1,5 +1,7 @@
-<resources>
-    <string name="app_name">FaceIn</string>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    <string name="app_name">FaceIn人脸签到</string>
     <string name="title_activity_slinding">SlindingActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -23,15 +25,15 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
     </string>
 
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
 
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+
+
+
     <string-array name="pref_example_list_titles">
         <item>Always</item>
         <item>When possible</item>
@@ -81,14 +83,11 @@
     <string name="pref_title_system_sync_settings">同步设置</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">提醒</string>
 
-    <string name="pref_title_new_message_notifications">有新消息时提醒</string>
 
-    <string name="pref_title_ringtone">铃声</string>
-    <string name="pref_ringtone_silent">静音</string>
 
-    <string name="pref_title_vibrate">震动</string>
+
+
     <string name="qianm">编辑你的个性签名</string>
     <string name="username">用户名</string>
 

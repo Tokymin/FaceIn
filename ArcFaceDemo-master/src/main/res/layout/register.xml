@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/v5_3_0_guide_pic2">
+    android:background="@drawable/v5_3_0_guide_pic2"
+    android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/linearLayout3"
         android:layout_width="fill_parent"
@@ -25,8 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:onClick="register_back"
             android:clickable="true"
+            android:onClick="register_back"
             android:text="@string/ba"
             android:textAlignment="viewEnd"
             android:textColor="@color/background_common"
@@ -34,13 +35,13 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="197dp"
+            android:layout_width="274dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="@string/register"
             android:textAlignment="center"
-            android:textColor="@color/Grey"
+            android:textColor="@color/background_common"
             android:textSize="18sp" />
 
         <TextView
@@ -53,29 +54,30 @@
             android:textSize="25.0sp"
             android:textStyle="bold" />
     </LinearLayout>
+
     <LinearLayout
 
-        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp">
 
         <ImageView
             android:id="@+id/image1"
-            android:layout_width="match_parent"
+            android:layout_width="110dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="40dp"
             android:layout_weight="3"
             android:clickable="true"
             android:src="@drawable/accout" />
 
         <TextView
             android:id="@+id/textView12"
-            android:layout_width="wrap_content"
+            android:layout_width="252dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="30dp"
             android:layout_weight="1"
             android:paddingTop="30dp"
-            android:text="请点击图片上传  真实头像"
+            android:text="请点击图片上传真实头像"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
             android:textColor="@color/background_common"
@@ -150,9 +152,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -202,9 +204,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginStart="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -275,7 +277,7 @@
                 android:id="@+id/spinner1"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="43dp"
+                android:layout_marginStart="45dp"
 
                 android:background="@drawable/color"
                 android:entries="@array/data" />

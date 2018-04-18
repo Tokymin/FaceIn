@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/v5_3_0_guide_pic1"
+    android:background="@drawable/v5_3_0_guide_pic2"
     android:gravity="top"
     android:orientation="vertical">
 
@@ -30,14 +30,14 @@
                 android:layout_height="50dp"
                 android:text="          " />
 
-            <com.arcsoft.sdk_demo.View.MyListView
+            <com.arcsoft.demo.View.MyListView
                 android:id="@+id/mylistview_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/list_default_round"
                 android:cacheColorHint="#00000000" />
 
-            <com.arcsoft.sdk_demo.View.MyListView
+            <com.arcsoft.demo.View.MyListView
                 android:id="@+id/mylistview_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 android:background="@drawable/list_default_round"
                 android:cacheColorHint="#00000000" />
 
-            <com.arcsoft.sdk_demo.View.MyListView
+            <com.arcsoft.demo.View.MyListView
                 android:id="@+id/mylistview_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
