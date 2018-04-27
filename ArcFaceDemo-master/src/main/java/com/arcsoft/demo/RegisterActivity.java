@@ -43,368 +43,351 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements SurfaceHolder.Callback {
-	private final String TAG = this.getClass().toString();
-	private final static int MSG_CODE = 0x1000;
-	private final static int MSG_EVENT_REG = 0x1001;
-	private final static int MSG_EVENT_NO_FACE = 0x1002;
-	private final static int MSG_EVENT_NO_FEATURE = 0x1003;
-	private final static int MSG_EVENT_FD_ERROR = 0x1004;
-	private final static int MSG_EVENT_FR_ERROR = 0x1005;
+    private final String TAG = this.getClass().toString();
+    private final static int MSG_CODE = 0x1000;
+    private final static int MSG_EVENT_REG = 0x1001;
+    private final static int MSG_EVENT_NO_FACE = 0x1002;
+    private final static int MSG_EVENT_NO_FEATURE = 0x1003;
+    private final static int MSG_EVENT_FD_ERROR = 0x1004;
+    private final static int MSG_EVENT_FR_ERROR = 0x1005;
 
     //学长改
-	private final static int REGISTER_SUCCESS_BACK = 0x0001;
+    private final static int REGISTER_SUCCESS_BACK = 0x0001;
     private final static int REGISTER_FAIL_BACK = 0x0000;
-	private Intent backIntent = new Intent();
-	private Activity intance = null;
-	private UIHandler mUIHandler;
-	// Intent data.
-	private String 		mFilePath;
-	private SurfaceView mSurfaceView;
-	private SurfaceHolder mSurfaceHolder;
-	private Bitmap mBitmap;
-	private Rect src = new Rect();
-	private Rect dst = new Rect();
-	private Thread view;
-	private EditText mEditText;
-	private ExtImageView mExtImageView;
+    private Intent backIntent = new Intent();
+    private Activity intance = null;
+    private UIHandler mUIHandler;
+    // Intent data.
+    private String mFilePath;
+    private SurfaceView mSurfaceView;
+    private SurfaceHolder mSurfaceHolder;
+    private Bitmap mBitmap;
+    private Rect src = new Rect();
+    private Rect dst = new Rect();
+    private Thread view;
+    private EditText mEditText;
+    private ExtImageView mExtImageView;
 
-	private HListView mHListView;
-	private RegisterViewAdapter mRegisterViewAdapter;
-	private AFR_FSDKFace mAFR_FSDKFace;
-	private Bitmap face_bitmap;
+    private HListView mHListView;
+    private RegisterViewAdapter mRegisterViewAdapter;
+    private AFR_FSDKFace mAFR_FSDKFace;
+    private Bitmap face_bitmap;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.activity_register);
-		if (!getIntentData(getIntent().getExtras())) {
-			Log.e(TAG, "getIntentData fail!");
-			this.finish() ;//如果通过意图得到的数据为空
-		}
-		intance = this;
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_register);
+        if (!getIntentData(getIntent().getExtras())) {
+            Log.e(TAG, "getIntentData fail!");
+            this.finish();//如果通过意图得到的数据为空
+        }
+        intance = this;
 
-		mRegisterViewAdapter = new RegisterViewAdapter(this);
-		mHListView = (HListView)findViewById(R.id.hlistView);
-		mHListView.setAdapter(mRegisterViewAdapter);
-		mHListView.setOnItemClickListener(mRegisterViewAdapter);
+        mRegisterViewAdapter = new RegisterViewAdapter(this);
+        mHListView = (HListView) findViewById(R.id.hlistView);
+        mHListView.setAdapter(mRegisterViewAdapter);
+        mHListView.setOnItemClickListener(mRegisterViewAdapter);
 
-		mUIHandler = new UIHandler();
-		mBitmap = Application.decodeImage(mFilePath); //直接就得到图片了
-		src.set(0,0,mBitmap.getWidth(),mBitmap.getHeight());
-		mSurfaceView = (SurfaceView)this.findViewById(R.id.surfaceView);
-		mSurfaceView.getHolder().addCallback(this);
-		view = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (mSurfaceHolder == null) {
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				byte[] data = new byte[mBitmap.getWidth() * mBitmap.getHeight() * 3 / 2];
-				ImageConverter convert = new ImageConverter();
-				convert.initial(mBitmap.getWidth(), mBitmap.getHeight(), ImageConverter.CP_PAF_NV21);
-				if (convert.convert(mBitmap, data)) {
-					Log.d(TAG, "convert ok!");
-				}
-				convert.destroy();
-				/*这一段是为了扫描 检测 人脸的*/
-				AFD_FSDKEngine engine = new AFD_FSDKEngine();
-				AFD_FSDKVersion version = new AFD_FSDKVersion();
-				List<AFD_FSDKFace> result = new ArrayList<AFD_FSDKFace>();//String toString()返回值:格式化人脸信息的字符串（String(”Rect(left, top – right, bottom), Degree”)）
-				AFD_FSDKError err = engine.AFD_FSDK_InitialFaceEngine(FaceDB.appid, FaceDB.fd_key, AFD_FSDKEngine.AFD_OPF_0_HIGHER_EXT, 16, 5);
-				Log.d(TAG, "AFD_FSDK_InitialFaceEngine = " + err.getCode());
-				if (err.getCode() != AFD_FSDKError.MOK) {
-					Message reg = Message.obtain();
-					reg.what = MSG_CODE;
-					reg.arg1 = MSG_EVENT_FD_ERROR;
-					reg.arg2 = err.getCode();
-					mUIHandler.sendMessage(reg);//打印错误消息的
-				}
-				err = engine.AFD_FSDK_GetVersion(version);
-				Log.d(TAG, "AFD_FSDK_GetVersion =" + version.toString() + ", " + err.getCode());
-				err  = engine.AFD_FSDK_StillImageFaceDetection(data, mBitmap.getWidth(), mBitmap.getHeight(), AFD_FSDKEngine.CP_PAF_NV21, result);
-				Log.d(TAG, "AFD_FSDK_StillImageFaceDetection =" + err.getCode() + "<" + result.size());
-				while (mSurfaceHolder != null) {
-					Canvas canvas = mSurfaceHolder.lockCanvas();
-					if (canvas != null) {
-						Paint mPaint = new Paint();
-						boolean fit_horizontal = canvas.getWidth() / (float)src.width() < canvas.getHeight() / (float)src.height() ? true : false;
-						float scale = 1.0f;
-						if (fit_horizontal) {
-							scale = canvas.getWidth() / (float)src.width();
-							dst.left = 0;
-							dst.top = (canvas.getHeight() - (int)(src.height() * scale)) / 2;
-							dst.right = dst.left + canvas.getWidth();
-							dst.bottom = dst.top + (int)(src.height() * scale);
-						} else {
-							scale = canvas.getHeight() / (float)src.height();
-							dst.left = (canvas.getWidth() - (int)(src.width() * scale)) / 2;
-							dst.top = 0;
-							dst.right = dst.left + (int)(src.width() * scale);
-							dst.bottom = dst.top + canvas.getHeight();
-						}//这一段在画那个人脸
+        mUIHandler = new UIHandler();
+        mBitmap = Application.decodeImage(mFilePath); //直接就得到图片了
+        src.set(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
+        mSurfaceView = (SurfaceView) this.findViewById(R.id.surfaceView);
+        mSurfaceView.getHolder().addCallback(this);
+        view = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (mSurfaceHolder == null) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                byte[] data = new byte[mBitmap.getWidth() * mBitmap.getHeight() * 3 / 2];
+                ImageConverter convert = new ImageConverter();
+                convert.initial(mBitmap.getWidth(), mBitmap.getHeight(), ImageConverter.CP_PAF_NV21);
+                if (convert.convert(mBitmap, data)) {
+                    Log.d(TAG, "convert ok!");
+                }
+                convert.destroy();
+                /*这一段是为了扫描 检测 人脸的*/
+                AFD_FSDKEngine engine = new AFD_FSDKEngine();
+                AFD_FSDKVersion version = new AFD_FSDKVersion();
+                List<AFD_FSDKFace> result = new ArrayList<AFD_FSDKFace>();//String toString()返回值:格式化人脸信息的字符串（String(”Rect(left, top – right, bottom), Degree”)）
+                AFD_FSDKError err = engine.AFD_FSDK_InitialFaceEngine(FaceDB.appid, FaceDB.fd_key, AFD_FSDKEngine.AFD_OPF_0_HIGHER_EXT, 16, 5);
+                Log.d(TAG, "AFD_FSDK_InitialFaceEngine = " + err.getCode());
+                if (err.getCode() != AFD_FSDKError.MOK) {
+                    Message reg = Message.obtain();
+                    reg.what = MSG_CODE;
+                    reg.arg1 = MSG_EVENT_FD_ERROR;
+                    reg.arg2 = err.getCode();
+                    mUIHandler.sendMessage(reg);//打印错误消息的
+                }
+                err = engine.AFD_FSDK_GetVersion(version);
+                Log.d(TAG, "AFD_FSDK_GetVersion =" + version.toString() + ", " + err.getCode());
+                err = engine.AFD_FSDK_StillImageFaceDetection(data, mBitmap.getWidth(), mBitmap.getHeight(), AFD_FSDKEngine.CP_PAF_NV21, result);
+                Log.d(TAG, "AFD_FSDK_StillImageFaceDetection =" + err.getCode() + "<" + result.size());
+                while (mSurfaceHolder != null) {
+                    Canvas canvas = mSurfaceHolder.lockCanvas();
+                    if (canvas != null) {
+                        Paint mPaint = new Paint();
+                        boolean fit_horizontal = canvas.getWidth() / (float) src.width() < canvas.getHeight() / (float) src.height() ? true : false;
+                        float scale = 1.0f;
+                        if (fit_horizontal) {
+                            scale = canvas.getWidth() / (float) src.width();
+                            dst.left = 0;
+                            dst.top = (canvas.getHeight() - (int) (src.height() * scale)) / 2;
+                            dst.right = dst.left + canvas.getWidth();
+                            dst.bottom = dst.top + (int) (src.height() * scale);
+                        } else {
+                            scale = canvas.getHeight() / (float) src.height();
+                            dst.left = (canvas.getWidth() - (int) (src.width() * scale)) / 2;
+                            dst.top = 0;
+                            dst.right = dst.left + (int) (src.width() * scale);
+                            dst.bottom = dst.top + canvas.getHeight();
+                        }//这一段在画那个人脸
 
-						canvas.drawBitmap(mBitmap, src, dst, mPaint);
-						canvas.save();
-						canvas.scale((float) dst.width() / (float) src.width(), (float) dst.height() / (float) src.height());
-						canvas.translate(dst.left / scale, dst.top / scale);
-						//result的长度？
-						for (AFD_FSDKFace face : result)
-						{
-							mPaint.setColor(Color.BLUE);//设置检测框颜色。
-							mPaint.setStrokeWidth(10.0f);
-							mPaint.setStyle(Paint.Style.STROKE);
-							canvas.drawRect(face.getRect(), mPaint);
-							//Toast.makeText(RegisterActivity.this,""+result.size(),Toast.LENGTH_SHORT);
-						}
-						canvas.restore();
-						mSurfaceHolder.unlockCanvasAndPost(canvas);
-						break;
-					}
-				}
-				if (!result.isEmpty()) {//不为空
-					AFR_FSDKVersion version1 = new AFR_FSDKVersion();
-					AFR_FSDKEngine engine1 = new AFR_FSDKEngine();
-					AFR_FSDKFace result1 = new AFR_FSDKFace();//特征
-					AFR_FSDKError error1 = engine1.AFR_FSDK_InitialEngine(FaceDB.appid, FaceDB.fr_key);
-					Log.d("com.arcsoft", "AFR_FSDK_InitialEngine = " + error1.getCode());
-					if (error1.getCode() != AFD_FSDKError.MOK) {
-						Message reg = Message.obtain();
-						reg.what = MSG_CODE;
-						reg.arg1 = MSG_EVENT_FR_ERROR;
-						reg.arg2 = error1.getCode();
-						mUIHandler.sendMessage(reg);
-					}
-					error1 = engine1.AFR_FSDK_GetVersion(version1);
-					Log.d("com.arcsoft", "FR=" + version.toString() + "," + error1.getCode()); //(210, 178 - 478, 446), degree = 1　780, 2208 - 1942, 3370
-					//这一句比较关键
-					error1 = engine1.AFR_FSDK_ExtractFRFeature(data, mBitmap.getWidth(),
-							mBitmap.getHeight(), AFR_FSDKEngine.CP_PAF_NV21,
-							new Rect(result.get(0).getRect()),
-							result.get(0).getDegree(), result1);//这个result1就是特征了吧
-					Log.d("com.arcsoft", "Face=" + result1.getFeatureData()[0] +
-							"," + result1.getFeatureData()[1] + "," + result1.getFeatureData()[2] +
-							"," + error1.getCode());
-					if(error1.getCode() == error1.MOK) {//如果是OK？
-						mAFR_FSDKFace = result1.clone();
-						int width = result.get(0).getRect().width();
-						int height = result.get(0).getRect().height();
-						face_bitmap= Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);//new 一个显示图片的地方
+                        canvas.drawBitmap(mBitmap, src, dst, mPaint);
+                        canvas.save();
+                        canvas.scale((float) dst.width() / (float) src.width(), (float) dst.height() / (float) src.height());
+                        canvas.translate(dst.left / scale, dst.top / scale);
+                        //result的长度？
+                        for (AFD_FSDKFace face : result) {
+                            mPaint.setColor(Color.BLUE);//设置检测框颜色。
+                            mPaint.setStrokeWidth(10.0f);
+                            mPaint.setStyle(Paint.Style.STROKE);
+                            canvas.drawRect(face.getRect(), mPaint);
+                            //Toast.makeText(RegisterActivity.this,""+result.size(),Toast.LENGTH_SHORT);
+                        }
+                        canvas.restore();
+                        mSurfaceHolder.unlockCanvasAndPost(canvas);
+                        break;
+                    }
+                }
+                if (!result.isEmpty()) {//不为空
+                    AFR_FSDKVersion version1 = new AFR_FSDKVersion();
+                    AFR_FSDKEngine engine1 = new AFR_FSDKEngine();
+                    AFR_FSDKFace result1 = new AFR_FSDKFace();//特征
+                    AFR_FSDKError error1 = engine1.AFR_FSDK_InitialEngine(FaceDB.appid, FaceDB.fr_key);
+                    Log.d("com.arcsoft", "AFR_FSDK_InitialEngine = " + error1.getCode());
+                    if (error1.getCode() != AFD_FSDKError.MOK) {
+                        Message reg = Message.obtain();
+                        reg.what = MSG_CODE;
+                        reg.arg1 = MSG_EVENT_FR_ERROR;
+                        reg.arg2 = error1.getCode();
+                        mUIHandler.sendMessage(reg);
+                    }
+                    error1 = engine1.AFR_FSDK_GetVersion(version1);
+                    Log.d("com.arcsoft", "FR=" + version.toString() + "," + error1.getCode()); //(210, 178 - 478, 446), degree = 1　780, 2208 - 1942, 3370
+                    //这一句比较关键
+                    error1 = engine1.AFR_FSDK_ExtractFRFeature(data, mBitmap.getWidth(), mBitmap.getHeight(), AFR_FSDKEngine.CP_PAF_NV21, new Rect(result.get(0).getRect()), result.get(0).getDegree(), result1);//这个result1就是特征了吧
+                    Log.d("com.arcsoft", "Face=" + result1.getFeatureData()[0] + "," + result1.getFeatureData()[1] + "," + result1.getFeatureData()[2] + "," + error1.getCode());
+                    if (error1.getCode() == error1.MOK) {//如果是OK？
+                        mAFR_FSDKFace = result1.clone();
+                        int width = result.get(0).getRect().width();
+                        int height = result.get(0).getRect().height();
+                        face_bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);//new 一个显示图片的地方
 
-						Canvas face_canvas = new Canvas(face_bitmap);//new 一个画布
-						face_canvas.drawBitmap(mBitmap, result.get(0).getRect(), new Rect(0, 0, width, height), null);
-						Message reg = Message.obtain();
-						reg.what = MSG_CODE;
-						reg.arg1 = MSG_EVENT_REG;
-						reg.obj = face_bitmap;
-						mUIHandler.sendMessage(reg);
-					} else {
-						Message reg = Message.obtain();
-						reg.what = MSG_CODE;
-						reg.arg1 = MSG_EVENT_NO_FEATURE;
-						mUIHandler.sendMessage(reg);
-					}
-					error1 = engine1.AFR_FSDK_UninitialEngine();
-					Log.d("com.arcsoft", "AFR_FSDK_UninitialEngine : " + error1.getCode());
-				} else {
-					Message reg = Message.obtain();
-					reg.what = MSG_CODE;
-					reg.arg1 = MSG_EVENT_NO_FACE;
-					mUIHandler.sendMessage(reg);
-				}
-				err = engine.AFD_FSDK_UninitialFaceEngine();
-				Log.d(TAG, "AFD_FSDK_UninitialFaceEngine =" + err.getCode());
-			}
-		});
-		view.start();
-	}
+                        Canvas face_canvas = new Canvas(face_bitmap);//new 一个画布
+                        face_canvas.drawBitmap(mBitmap, result.get(0).getRect(), new Rect(0, 0, width, height), null);
+                        Message reg = Message.obtain();
+                        reg.what = MSG_CODE;
+                        reg.arg1 = MSG_EVENT_REG;
+                        reg.obj = face_bitmap;
+                        mUIHandler.sendMessage(reg);
+                    } else {
+                        Message reg = Message.obtain();
+                        reg.what = MSG_CODE;
+                        reg.arg1 = MSG_EVENT_NO_FEATURE;
+                        mUIHandler.sendMessage(reg);
+                    }
+                    error1 = engine1.AFR_FSDK_UninitialEngine();
+                    Log.d("com.arcsoft", "AFR_FSDK_UninitialEngine : " + error1.getCode());
+                } else {
+                    Message reg = Message.obtain();
+                    reg.what = MSG_CODE;
+                    reg.arg1 = MSG_EVENT_NO_FACE;
+                    mUIHandler.sendMessage(reg);
+                }
+                err = engine.AFD_FSDK_UninitialFaceEngine();
+                Log.d(TAG, "AFD_FSDK_UninitialFaceEngine =" + err.getCode());
+            }
+        });
+        view.start();
+    }
 
-	private boolean getIntentData(Bundle bundle) {
-		try {//在这通过意图得到刚才 “imagePath” 这个request穿过来的东西
-			mFilePath = bundle.getString("imagePath");//直接就得到了？？
-			if (mFilePath == null || mFilePath.isEmpty()) {
-				return false;
-			}
-			Log.i(TAG, "getIntentData:" + mFilePath);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+    private boolean getIntentData(Bundle bundle) {
+        try {//在这通过意图得到刚才 “imagePath” 这个request穿过来的东西
+            mFilePath = bundle.getString("imagePath");//直接就得到了？？
+            if (mFilePath == null || mFilePath.isEmpty()) {
+                return false;
+            }
+            Log.i(TAG, "getIntentData:" + mFilePath);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		mSurfaceHolder = holder;
-	}
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        mSurfaceHolder = holder;
+    }
 
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-	}
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    }
 
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		mSurfaceHolder = null;
-		try {
-			view.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        mSurfaceHolder = null;
+        try {
+            view.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-	class UIHandler extends android.os.Handler {
+    class UIHandler extends android.os.Handler {
 
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			if (msg.what == MSG_CODE) {
-				if (msg.arg1 == MSG_EVENT_REG) {
-					LayoutInflater inflater = LayoutInflater.from(RegisterActivity.this);
-					View layout = inflater.inflate(R.layout.dialog_register, null);
-					mEditText = (EditText) layout.findViewById(R.id.editview);
-					mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
-					mExtImageView = (ExtImageView) layout.findViewById(R.id.extimageview);
-					mExtImageView.setImageBitmap((Bitmap) msg.obj);
-					final Bitmap face = (Bitmap) msg.obj;//小头像在这里
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == MSG_CODE) {
+                if (msg.arg1 == MSG_EVENT_REG) {
+                    LayoutInflater inflater = LayoutInflater.from(RegisterActivity.this);
+                    View layout = inflater.inflate(R.layout.dialog_register, null);
+                    mEditText = (EditText) layout.findViewById(R.id.editview);
+                    mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(16)});
+                    mExtImageView = (ExtImageView) layout.findViewById(R.id.extimageview);
+                    mExtImageView.setImageBitmap((Bitmap) msg.obj);
+                    final Bitmap face = (Bitmap) msg.obj;//小头像在这里
 
-					new AlertDialog.Builder(RegisterActivity.this)
-							.setTitle("请输入名字")
-							.setIcon(android.R.drawable.ic_dialog_info)
-							.setView(layout)
-							.setPositiveButton("完成", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									((Application)RegisterActivity.this.getApplicationContext()).mFaceDB.addFace(mEditText.getText().toString(), mAFR_FSDKFace);
+                    new AlertDialog.Builder(RegisterActivity.this).setTitle("请输入名字").setIcon(android.R.drawable.ic_dialog_info).setView(layout).setPositiveButton("完成", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((Application) RegisterActivity.this.getApplicationContext()).mFaceDB.addFace(mEditText.getText().toString(), mAFR_FSDKFace);
 
-									backIntent.putExtra("userName", mEditText.getText().toString());
+                            backIntent.putExtra("userName", mEditText.getText().toString());
 
-									ByteArrayOutputStream baos=new ByteArrayOutputStream();
-									face.compress(Bitmap.CompressFormat.PNG, 100, baos);
-									byte [] bitmapByte =baos.toByteArray();
-									backIntent.putExtra("userImage", bitmapByte);
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            face.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                            byte[] bitmapByte = baos.toByteArray();
+                            backIntent.putExtra("userImage", bitmapByte);
+                            String faceData = ((Application) RegisterActivity.this.getApplicationContext()).mFaceDB.mDBPath + "/" + mEditText.getText().toString() + ".data";
+                            backIntent.putExtra("faceData", faceData);
 
-									String faceData = ((Application)RegisterActivity.this.getApplicationContext()).mFaceDB.mDBPath + "/" + mEditText.getText().toString() + ".data";
-									backIntent.putExtra("faceData", faceData);
+                            Log.e("backIntent-->", "" + mEditText.getText() + "====" + bitmapByte + "====" + faceData);
+                            intance.setResult(REGISTER_SUCCESS_BACK, backIntent);
+                            intance.finish();
+                            dialog.dismiss();
 
-									Log.e("backIntent-->", ""+mEditText.getText()+"===="+bitmapByte+"===="+faceData);
-									intance.setResult(REGISTER_SUCCESS_BACK, backIntent);
-									intance.finish();
-									dialog.dismiss();
+                        }
+                    }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            backIntent.putExtra("failInfo", "未选中照片");
+                            intance.setResult(REGISTER_FAIL_BACK, backIntent);
+                            intance.finish();
+                            dialog.dismiss();
+                        }
+                    }).show();
 
-								}
-							})
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    backIntent.putExtra("failInfo", "未选中照片");
-                                    intance.setResult(REGISTER_FAIL_BACK, backIntent);
-                                    intance.finish();
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
+                } else if (msg.arg1 == MSG_EVENT_NO_FEATURE) {
+                    Toast.makeText(RegisterActivity.this, "人脸特征无法检测，请换一张图片", Toast.LENGTH_SHORT).show();
+                } else if (msg.arg1 == MSG_EVENT_NO_FACE) {
+                    Toast.makeText(RegisterActivity.this, "没有检测到人脸，请换一张图片", Toast.LENGTH_SHORT).show();
+                } else if (msg.arg1 == MSG_EVENT_FD_ERROR) {
+                    Toast.makeText(RegisterActivity.this, "FD初始化失败，错误码：" + msg.arg2, Toast.LENGTH_SHORT).show();
+                } else if (msg.arg1 == MSG_EVENT_FR_ERROR) {
+                    Toast.makeText(RegisterActivity.this, "FR初始化失败，错误码：" + msg.arg2, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
 
-				} else if(msg.arg1 == MSG_EVENT_NO_FEATURE ){
-					Toast.makeText(RegisterActivity.this, "人脸特征无法检测，请换一张图片", Toast.LENGTH_SHORT).show();
-				} else if(msg.arg1 == MSG_EVENT_NO_FACE ){
-					Toast.makeText(RegisterActivity.this, "没有检测到人脸，请换一张图片", Toast.LENGTH_SHORT).show();
-				} else if(msg.arg1 == MSG_EVENT_FD_ERROR ){
-					Toast.makeText(RegisterActivity.this, "FD初始化失败，错误码：" + msg.arg2, Toast.LENGTH_SHORT).show();
-				} else if(msg.arg1 == MSG_EVENT_FR_ERROR){
-					Toast.makeText(RegisterActivity.this, "FR初始化失败，错误码：" + msg.arg2, Toast.LENGTH_SHORT).show();
-				}
-			}
-		}
-	}
-	class Holder {
-		ExtImageView siv;
-		TextView tv;
-	}
+    class Holder {
+        ExtImageView siv;
+        TextView tv;
+    }
 
-	class RegisterViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener{
-		Context mContext;
-		LayoutInflater mLInflater;
+    class RegisterViewAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+        Context mContext;
+        LayoutInflater mLInflater;
 
-		public RegisterViewAdapter(Context c) {
+        public RegisterViewAdapter(Context c) {
 
-			mContext = c;
-			mLInflater = LayoutInflater.from(mContext);
-		}
+            mContext = c;
+            mLInflater = LayoutInflater.from(mContext);
+        }
 
-		@Override
-		public int getCount() {
+        @Override
+        public int getCount() {
 
-			return ((Application)mContext.getApplicationContext()).mFaceDB.mRegister.size();
-		}
+            return ((Application) mContext.getApplicationContext()).mFaceDB.mRegister.size();
+        }
 
-		@Override
-		public Object getItem(int arg0) {
+        @Override
+        public Object getItem(int arg0) {
 
-			return null;
-		}
+            return null;
+        }
 
-		@Override
-		public long getItemId(int position) {
+        @Override
+        public long getItemId(int position) {
 
-			return position;
-		}
+            return position;
+        }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-			Holder holder = null;
-			if (convertView != null) {
-				holder = (Holder) convertView.getTag();
-			} else {
-				convertView = mLInflater.inflate(R.layout.item_sample, null);
-				holder = new Holder();
-				holder.siv = (ExtImageView) convertView.findViewById(R.id.imageView1);
-				holder.tv = (TextView) convertView.findViewById(R.id.textView1);
-				convertView.setTag(holder);
-			}
+            Holder holder = null;
+            if (convertView != null) {
+                holder = (Holder) convertView.getTag();
+            } else {
+                convertView = mLInflater.inflate(R.layout.item_sample, null);
+                holder = new Holder();
+                holder.siv = (ExtImageView) convertView.findViewById(R.id.imageView1);
+                holder.tv = (TextView) convertView.findViewById(R.id.textView1);
+                convertView.setTag(holder);
+            }
 
-			if (!((Application)mContext.getApplicationContext()).mFaceDB.mRegister.isEmpty()) {
-				FaceDB.FaceRegist face = ((Application) mContext.getApplicationContext()).mFaceDB.mRegister.get(position);
-				holder.tv.setText(face.mName);
-				//holder.siv.setImageResource(R.mipmap.ic_launcher);
-				convertView.setWillNotDraw(true);
-			}
+            if (!((Application) mContext.getApplicationContext()).mFaceDB.mRegister.isEmpty()) {
+                FaceDB.FaceRegist face = ((Application) mContext.getApplicationContext()).mFaceDB.mRegister.get(position);
+                holder.tv.setText(face.mName);
+                //holder.siv.setImageResource(R.mipmap.ic_launcher);
+                convertView.setWillNotDraw(true);
+            }
 
-			return convertView;
-		}
+            return convertView;
+        }
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Log.d("onItemClick", "onItemClick = " + position + "pos=" + mHListView.getScroll());
-			final String name = ((Application)mContext.getApplicationContext()).mFaceDB.mRegister.get(position).mName;
-			final int count = ((Application)mContext.getApplicationContext()).mFaceDB.mRegister.get(position).mFaceList.size();
-			new AlertDialog.Builder(RegisterActivity.this)
-					.setTitle("删除注册名:" + name)
-					.setMessage("包含:" + count + "个注册人脸特征信息")
-					.setIcon(android.R.drawable.ic_dialog_alert)
-					.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							((Application)mContext.getApplicationContext()).mFaceDB.delete(name);
-							mRegisterViewAdapter.notifyDataSetChanged();
-							dialog.dismiss();
-						}
-					})
-					.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-						}
-					})
-					.show();
-		}
-	}
-	@Override
-	public void onBackPressed() {
-		finish();
-	}
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d("onItemClick", "onItemClick = " + position + "pos=" + mHListView.getScroll());
+            final String name = ((Application) mContext.getApplicationContext()).mFaceDB.mRegister.get(position).mName;
+            final int count = ((Application) mContext.getApplicationContext()).mFaceDB.mRegister.get(position).mFaceList.size();
+            new AlertDialog.Builder(RegisterActivity.this).setTitle("删除注册名:" + name).setMessage("包含:" + count + "个注册人脸特征信息").setIcon(android.R.drawable.ic_dialog_alert).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((Application) mContext.getApplicationContext()).mFaceDB.delete(name);
+                    mRegisterViewAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

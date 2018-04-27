@@ -126,7 +126,7 @@ public class CourseTableView extends RelativeLayout {
 
 
     public interface OnCourseItemClickListener {
-        void onCourseItemClick(TextView tv, int jieci, int day, String des);
+        void onCourseItemClick(TextView tv, int jieci, int day, String des,String studentSum, String SumPeriod, String time, String title, String courseid, String coursename, String Classteacher, String coursemark, String remark, String classroom,String xuankeID,String fullTime);
     }
 
     private void init(Context context) {
@@ -214,6 +214,7 @@ public class CourseTableView extends RelativeLayout {
 
             tv = new TextView(getContext());
             flp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
             tv.setText(c.getDes());
             tv.setTextColor(Color.WHITE);
             tv.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
@@ -229,9 +230,9 @@ public class CourseTableView extends RelativeLayout {
             tv.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setOnCourseItemClickListener(onCourseItemClickListener);
+                    setOnCourseItemClickListener(onCourseItemClickListener);//String studentSum, String SumPeriod, String time, String title, String courseid, String coursename, String Classteacher, String coursemark, String remark
                     if (onCourseItemClickListener != null)
-                        onCourseItemClickListener.onCourseItemClick((TextView) v, jieci, day, c.getDes());
+                        onCourseItemClickListener.onCourseItemClick((TextView) v, jieci, day, c.getDes(),c.getStudentSum(),c.getSumPeriod(),c.getTime(),c.getTitle(),c.getCourseid(),c.getCoursename(),c.getClassteacher(),c.getCoursemark(),c.getRemark(),c.getClassRoomName(),c.getXuankeID(),c.getFullTime());
                 }
             });
             fl.addView(tv);

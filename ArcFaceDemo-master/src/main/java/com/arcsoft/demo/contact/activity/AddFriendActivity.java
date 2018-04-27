@@ -71,7 +71,7 @@ public class AddFriendActivity extends UI {
 
     private void query() {
         DialogMaker.showProgressDialog(this, null, false);
-        final String account = searchEdit.getText().toString().toLowerCase();
+        final String account = searchEdit.getText().toString().toLowerCase()+"9078542437";
         NimUIKit.getUserInfoProvider().getUserInfoAsync(account, new SimpleCallback<NimUserInfo>() {
             @Override
             public void onResult(boolean success, NimUserInfo result, int code) {

@@ -334,7 +334,6 @@ public class XListView extends ListView implements OnScrollListener {
 				int x = (int) ev.getX();
 				int y = (int) ev.getY();
 				int itemnum = pointToPosition(x, y);
-
 				if (itemnum == 0) {
 					if (itemnum == (getAdapter().getCount() - 1)) {
 						// 只有一项

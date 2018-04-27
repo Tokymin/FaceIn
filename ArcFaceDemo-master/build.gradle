@@ -1,15 +1,19 @@
 buildscript {
     repositories {
-        maven { url 'https://fabric-artifacts.s3.amazonaws.com/public' }
+        jcenter()
+        google()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'com.android.tools.build:gradle:2.3.3'
+
+
     }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 def AAVersion = '3.3.2'
 def static getGitVersion() {
     try {
@@ -111,6 +115,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.7.0'
     compile 'com.android.support:multidex:1.0.1'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(path: ':android-extend', configuration: 'release')
@@ -142,5 +147,11 @@ apt {
 
         androidManifestFile variant.outputs[0]?.processResources?.manifestFile
         resourcePackageName "com.arcsoft.sdk_demo"
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+        google()
     }
 }

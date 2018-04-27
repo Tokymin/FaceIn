@@ -1,64 +1,53 @@
 package com.arcsoft.demo;
+
 import android.util.Base64;
 import android.util.Log;
+
 import com.arcsoft.facerecognition.AFR_FSDKFace;
-import org.json.JSONObject;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.net.URLConnection;
+
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by win7 on 2018/1/27.
  */
 
 public class GeekNetConnection {
-    private static String geekURL = "http://geek-team.xin/FaceIn/";
 
-    public static AFR_FSDKFace getFaceData (String userID) {
+
+    public static AFR_FSDKFace getFaceData(String userID) {
+        String url_getData = "http://geek-team.xin/signIn/getData?sId="+userID;
         AFR_FSDKFace face = null;
+        Log.e(":::aaaaaa:::", "userID:::" + userID);
+        OkHttpClient client = new OkHttpClient();//创建OkHttpClient对象。
+        //FormBody.Builder formBody = new FormBody.Builder();//创建表单请求体
+        Request request = new Request.Builder()//创建Request 对象。
+                .url(url_getData)
+                //.post(formBody.build())//传递请求体
+                .build();
+        Response response = null;
+        Log.e(":::aaaaaa:::", "asfffffffffafs:::" + userID);
         try {
-            URL url = new URL(geekURL+"SignStudent");
-            URLConnection conn = url.openConnection();
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setConnectTimeout(5000);
-            conn.setRequestProperty("accept", "*/*");
-            conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-            conn.setRequestProperty("Accept-Charset", "UTF-8");
-            conn.setRequestProperty("contentType", "UTF-8");
-            JSONObject params = new JSONObject();
-            params.put("studentid", userID);
-            PrintWriter pw = new PrintWriter(new OutputStreamWriter(conn.getOutputStream()));
-            pw.print(params.toString());
-            pw.flush();
-            conn.connect();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String tempLine = reader.readLine();
-            JSONObject netReturn = new JSONObject(tempLine);
-            String result = netReturn.getString("result");
-            Log.e(":::GeekNetConnection:::", "image");
-            if (result.equals("true")) {
-                String imgReturn = netReturn.getString("data");
-
-                Log.e(":::GeekNetConnection:::", "imgReturn:::"+imgReturn);
-
-                Log.e(":::GeekNetConnection:::", "imgReturn:::2:::"+FaceDB.data);
-                byte[] imgBytes = Base64.decode(imgReturn, Base64.DEFAULT);
-                Log.e(":::GeekNetConnection:::", "imgByes:::"+imgBytes);
-                face = new AFR_FSDKFace(imgBytes);
-                return face;
-            } else {
-                Log.e(":::GeekNetConnection:::", result.toString());
-            }
-            reader.close();
-        } catch (Exception e) {
+            response = client.newCall(request).execute();
+            Log.e(":::bbbbb:::", "asfffffffffafs:::" + userID);
+            String result = response.body().string();
+            Log.e("bbbbb", "????5svdsg"+result);
+            byte[] imgBytes= Base64.decode(result, Base64.DEFAULT);
+            Log.e(":::GeekNetConnection:::", "imgBSRHdtrshszdsezgredyes:::");
+            face = new AFR_FSDKFace(imgBytes);
+            Log.e(":::GeekNetConnection:::", "sgrhethrsj:::");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (!response.isSuccessful()) try {
+            throw new IOException("Unexpected code " + response);
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return face;
-
     }
 }

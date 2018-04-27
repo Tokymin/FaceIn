@@ -195,9 +195,6 @@ public class MainActivity extends Activity {
     }
 
     //点击登录按钮
-    public void login_data() throws IOException {
-
-    }
 
     class UIhandler3 extends Handler {
         @Override
@@ -302,7 +299,8 @@ public class MainActivity extends Activity {
         // 在这里直接使用同步到云信服务器的帐号和token登录。
         // 这里为了简便起见，demo就直接使用了密码的md5作为token。
         // 如果开发者直接使用这个demo，只更改appkey，然后就登入自己的账户体系的话，需要传入同步到云信服务器的token，而不是用户密码。
-        final String account = mUser.getEditableText().toString().toLowerCase();
+
+        final String account =mUser.getEditableText().toString()+RegisterActivity1.secret;
         final String token = tokenFromPassword(mPassword.getEditableText().toString());
         // 登录
         loginRequest = NimUIKit.login(new LoginInfo(account, token), new RequestCallback<LoginInfo>() {

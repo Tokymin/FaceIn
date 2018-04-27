@@ -21,6 +21,7 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -32,24 +33,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.arcsoft.demo.Activity.MainActivity;
 import com.arcsoft.demo.Database.MyDatabaseHelper;
 import com.arcsoft.demo.contact.ContactHttpClient;
+import com.arcsoft.demo.getdata.asynctask.Task;
 import com.netease.nim.uikit.common.ui.dialog.DialogMaker;
 import com.netease.nim.uikit.common.util.sys.NetworkUtil;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
 
 public class RegisterActivity1 extends Activity {
     private static final int TIAOZHUAN = 5;
@@ -60,12 +54,13 @@ public class RegisterActivity1 extends Activity {
     private Button zhuce;
     private Bitmap image;
     private String getUsername;
+    private String Username;
+    public static final String secret= "9078542437";
     private String getUserpassword;
     private String et_name1;
     private String pwd22;
     private String spinner2;
     private String classes1;
-
     private ImageView image1;
     private EditText register_username;
     private EditText register_userpassword;
@@ -79,15 +74,15 @@ public class RegisterActivity1 extends Activity {
     private static final int REQUEST_CODE_OP = 3;
     public static final int UPDATE_BITEMAP = 4;
     private final static int REGISTER_SUCCESS_BACK = 0x0001;
-
-
+    String result;
+    String imgname;
     // 学长加的
     private String userName = null;
     private byte[] userFace = null;
     private String faceData = null;
     private final static int REGISTER_FAIL_BACK = 0x0000;
     private Activity instance = null;
-
+    String img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -96,9 +91,7 @@ public class RegisterActivity1 extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,/*set it to be full screen*/
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.register);
-
         instance = this;// 学长改的
-
         et_name = (EditText) findViewById(R.id.name1);
         pwd2 = (EditText) findViewById(R.id.psw2);
         spinner = (Spinner) findViewById(R.id.spinner1);
@@ -135,116 +128,39 @@ public class RegisterActivity1 extends Activity {
                 }).show();
             }
         });
-
         register_username = (EditText) findViewById(R.id.register_username);
         register_userpassword = (EditText) findViewById(R.id.register_userpassword);
         dbHelper = new MyDatabaseHelper(this, "user.db", null, 1);
         db = dbHelper.getReadableDatabase();
-
         zhuce.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getUsername = register_username.getText().toString().trim();
+                Username = register_username.getText().toString().trim();
+                getUsername = register_username.getText().toString().trim()+secret;
                 getUserpassword = register_userpassword.getText().toString().trim();
                 et_name1 = et_name.getText().toString().trim();
                 pwd22 = pwd2.getText().toString().trim();
                 classes1 = classes.getText().toString().trim();
                 spinner2 = spinner.getSelectedItem().toString().trim();
-				
                 saveDataToFile(RegisterActivity1.this,et_name1,"name");
                 saveDataToFile(RegisterActivity1.this,getUsername,"numbers");
-
-
                 if (!getUserpassword.equals(pwd22)) {
                     new AlertDialog.Builder(RegisterActivity1.this).setTitle("提示！").setMessage("两次密码不一致!").create().show();
                 }
                 if (getUsername.equals("") || getUserpassword.equals("")) {
                     new AlertDialog.Builder(RegisterActivity1.this).setTitle("提示！").setMessage("用户名或密码不能为空!").create().show();
                 } else {
-                    register();
+//                    img= Base64.encodeToString(userFace,Base64.DEFAULT);
+                    img=byteArrayToStr(userFace);
+                    imgname=Username+".PNG";
+                    if(register()){
+                        new Task(RegisterActivity1.this,Username,getUserpassword,FaceDB.data,img,imgname).execute();
+                    }
+
                 }
             }
         });
     }
-    //联网操作
-    public void httpp() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PrintWriter out = null;
-                BufferedReader in = null;
-                try {
-                    URL realUrl = new URL("http://geek-team.xin/FaceIn/SRegister");
-                    HttpURLConnection conn = (HttpURLConnection) realUrl.openConnection();
-                    conn.setRequestProperty("accept", "*/*");
-                    conn.setRequestProperty("connection", "Keep-Alive");
-                    conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-                    conn.setRequestProperty("Accept-Charset", "UTF-8");
-                    conn.setRequestProperty("contentType", "UTF-8");
-                    // POST
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-                    out = new PrintWriter(conn.getOutputStream());
-                    JSONObject object = new JSONObject();
-                    object.put("name", et_name1);
-                    object.put("id", getUsername);
-                    object.put("password", getUserpassword);
-                    object.put("sex", spinner2);
-                    object.put("class", classes1);
-                    if (image.getHeight() > 10) {
-                        object.put("img", Bitmap2String(image));
-                        Log.e(":::put image:::", "image=" + Bitmap2String(image));
-                    } else {
-                        Log.e(":::image:::", "image.Height=" + image.getHeight() + ":::image.Width=" + image.getWidth());
-                    }
-                    object.put("data", FaceDB.data);
-                    Log.e(":::image:::data:::", FaceDB.data);
-                    out.println(object.toString());
-                    out.flush();
-                    conn.connect();
-                    // BufferedReader
-                    in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    //读结果
-                    String line = in.readLine();
-                    JSONObject object1 = new JSONObject(line);
-                    String result = object1.getString("result");
-                    Log.e(":::返回result:::", "==" + result);
-                    if (result.equals("true")) {
-                        Message ms2 = Message.obtain();
-                        ms2.what = TIAOZHUAN;
-                        handler.sendMessage(ms2);
-                    } else {
-                        Toast.makeText(RegisterActivity1.this, result, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (out != null) {
-                            out.close();
-                        }
-                        if (in != null) {
-                            in.close();
-                        }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-    }
-    //图像转字节
-    public byte[] Bitmap2Bytes(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
-    }
-
-    // 图像转String
-    public String Bitmap2String(Bitmap image) {
-        return Base64.encodeToString(Bitmap2Bytes(image), Base64.DEFAULT);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -291,7 +207,7 @@ public class RegisterActivity1 extends Activity {
             image1.setImageBitmap(BitmapFactory.decodeByteArray(userFace, 0, userFace.length));
             image = ((BitmapDrawable) image1.getDrawable()).getBitmap();
         } else if (resultCode == REGISTER_FAIL_BACK) {
-//            String failInfo = data.getStringExtra("failInfo");
+
             Log.e("Fail backIntent-->", "失败");
             new android.app.AlertDialog.Builder(instance).setTitle("Sorry").setMessage("您未选择照片").setPositiveButton("确定", null).show();
         }
@@ -308,24 +224,15 @@ public class RegisterActivity1 extends Activity {
                     image = ((BitmapDrawable) image1.getDrawable()).getBitmap();
                     break;
                 case TIAOZHUAN:
-                    Log.e("REG","setpppp");
-                    Toast.makeText(RegisterActivity1.this, R.string.register_success, Toast.LENGTH_SHORT).show();
-                    Log.e("REG","setpppp1");
-                    DialogMaker.dismissProgressDialog();
-                    Intent intent = new Intent(RegisterActivity1.this, MainActivity.class);
-//                    getUsername = register_username.getText().toString().trim();
-//                    getUserpassword = register_userpassword.getText().toString().trim();
-                    intent.putExtra("username",getUsername);
-                    intent.putExtra("userpassword",getUserpassword);
-                    startActivity(intent);
-                    finish();
+                    String img=byteArrayToStr(userFace);
+                    String imgname=getUsername+".PNG";
+                    new Task(RegisterActivity1.this,userName,getUserpassword,FaceDB.data,img,imgname).execute();
                     break;
                 default:
                     break;
             }
         }
     };
-
     private String getPath(Uri uri) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (DocumentsContract.isDocumentUri(this, uri)) {
@@ -443,7 +350,6 @@ public class RegisterActivity1 extends Activity {
         }
         return null;
     }
-
     /**
      * @param mBitmap
      */
@@ -454,29 +360,24 @@ public class RegisterActivity1 extends Activity {
         it.putExtras(bundle);
         startActivityForResult(it, REQUEST_CODE_OP);
     }
-
     /**
      * ***************************************** 注册 **************************************
      */
-
-    private void register() {
+    private Boolean register() {
         if (!checkRegisterContentValid()) {
-            return;
+            return false;
         }
         if (!NetworkUtil.isNetAvailable(RegisterActivity1.this)) {
             Toast.makeText(RegisterActivity1.this, R.string.network_is_not_available, Toast.LENGTH_SHORT).show();
-            return;
+            return false;
         }
         Log.e("register", "step2");
         DialogMaker.showProgressDialog(this, getString(R.string.registering), false);
         // 注册流程
-
-        ContactHttpClient.getInstance().register(getUsername, et_name1, getUserpassword, new ContactHttpClient.ContactHttpCallback<Void>() {
-
+        ContactHttpClient.getInstance().register(getUsername, et_name1, getUserpassword,new ContactHttpClient.ContactHttpCallback<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.e("register", "step3");
-                httpp();
             }
 
             @Override
@@ -486,29 +387,38 @@ public class RegisterActivity1 extends Activity {
                 DialogMaker.dismissProgressDialog();
             }
         });
+        return true;
     }
-
+    public  String byteArrayToStr(byte[] byteArray) {
+        if (byteArray == null) {
+            return null;
+        }
+        String str = null;
+        try {
+            str = new String(byteArray,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
     private boolean checkRegisterContentValid() {
         // 帐号检查
         if (getUsername.length() < 6 || getUsername.length() > 20) {
-            Toast.makeText(this, "账号不得少于6位数", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "账号不得少于6位数或超过20位", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         // 密码检查
         if (getUserpassword.length() < 6 || getUserpassword.length() > 20) {
             Toast.makeText(this, "密码不得少于6位数", Toast.LENGTH_SHORT).show();
 
             return false;
         }
-
         return true;
     }
     private void saveDataToFile(Context context,String data,String fileName)
     {
         FileOutputStream fileOutputStream=null;
         BufferedWriter bufferedWriter=null;
-
         try {
             fileOutputStream=context.openFileOutput(fileName,Context.MODE_PRIVATE);
             bufferedWriter=new BufferedWriter(new OutputStreamWriter(fileOutputStream));
@@ -524,9 +434,5 @@ public class RegisterActivity1 extends Activity {
                 e.printStackTrace();
             }
         }
-
     }
-	
-
-
 }

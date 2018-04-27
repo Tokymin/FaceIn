@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,14 +21,18 @@ import com.arcsoft.demo.Activity.NewsActivity;
 import com.arcsoft.demo.Activity.NoteActivity;
 import com.arcsoft.demo.Activity.SlindingActivity;
 import com.arcsoft.demo.R;
-import com.arcsoft.demo.getdata.asynctask.CommitJsonAsyntask;
+import com.arcsoft.demo.View.Course;
+import com.arcsoft.demo.View.XListView;
 import com.arcsoft.demo.getdata.asynctask.DownloadAsyncTask;
+import com.arcsoft.demo.getdata.utils.MyJsonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static com.arcsoft.demo.Activity.SlindingActivity.userID;
 
 /**
  * Created by Toky on 2018/1/13.
@@ -44,17 +49,12 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
     private TextView text3;
     private TextClock textClock;
     private DownloadAsyncTask gettoaday;
-    View view;
+    private View view;
     private ViewPager mViewPaper;
     private List<ImageView> images;
     private List<View> dots;
-    private String commitstrs;
-    private String date;//上传的当前日期
-    private String userid;
     private int currentItem;
-    //记录上一次点的位置
     private int oldPosition = 0;
-    //存放图片的id
     private int[] imageIds = new int[]{
             R.drawable.a,
             R.drawable.b,
@@ -62,7 +62,6 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
             R.drawable.d,
             R.drawable.e
     };
-    //存放图片的标题
     private String[]  titles = new String[]{
             "FaceIn",
             "人脸识别",
@@ -73,8 +72,14 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
     private TextView title;
     private ViewPagerAdapter adapter;
     private ScheduledExecutorService scheduledExecutorService;
+    public static XListView mListView;
+    public static SimpleAdapter mAdapter;//？？？
+    public static Handler handler;
+    public static List<Course> courseLists;
+
     public HomeNewsFragment() {
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view=inflater.inflate(R.layout.fragment_home,container,false);
@@ -126,16 +131,22 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
 
             }
         });
-//        new DownloadAsyncTask(this,list,new MyJsonUtils())
-//                .execute(MyUrl.url);
-        userid=SlindingActivity.userID;
-        date=textClock.getFormat12Hour().toString();//
-        Log.e("HomeFr","????1"+date);
-        commitstrs="userid="+userid+"&today="+date;//组装上传数据
-        new CommitJsonAsyntask(getActivity(),commitstrs).execute();
+
+
+        Log.e("HomeFr","????2");
+        /** 下拉刷新，上拉加载 */
+
+        mListView = (XListView)view.findViewById(R.id.ListView_today);//
+        mListView.setPullLoadEnable(true);// 设置让它上拉，FALSE为不让上拉，便不加载更多数据
+        mHandler = new Handler();
+        courseLists=new ArrayList<Course>();
+
+        new DownloadAsyncTask(getActivity(),userID,mHandler,courseLists,new MyJsonUtils()).execute();
         return view;
     }
-
+//    public List<Course> getCourseLists(){
+//        return this.courseLists;
+//    }
     private void findview() {
 
         img1=view.findViewById(R.id.iv_chat);
@@ -145,7 +156,7 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
         text1=view.findViewById(R.id.lookmore);//查看更多
         text2=view.findViewById(R.id.goreview);//复习
         text3=view.findViewById(R.id.more);//查更多
-        TextView text4=view.findViewById(R.id.today);//今天
+
         textClock= view.findViewById(R.id.textClock);
         textClock.setFormat24Hour("yyyy-MM-dd");
 
@@ -156,7 +167,7 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
         text1.setOnClickListener(this);
         text2.setOnClickListener(this);
         text3.setOnClickListener(this);
-        text4.setOnClickListener(this);
+
     }
 
     @Override
@@ -189,10 +200,10 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
                 Intent intent3 = new Intent(getActivity(), NewsActivity.class);
                 startActivity(intent3);
                 break;
-            case R.id.today:
-                SlindingActivity slindingActivity3=(SlindingActivity) getActivity();
-                slindingActivity3.setFramet(1);
-                break;
+//            case R.id.today:
+//                SlindingActivity slindingActivity3=(SlindingActivity) getActivity();
+//                slindingActivity3.setFramet(1);
+//                break;
 
         }
 
@@ -233,20 +244,10 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-//        scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-//        scheduledExecutorService.scheduleWithFixedDelay(
-//                new ViewPageTask(),
-//                3,
-//                5,
-//                TimeUnit.SECONDS);
-
         if(scheduledExecutorService!=null){
             scheduledExecutorService.shutdown();
         }
-
-
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-//每两秒切换一次图片显示
         scheduledExecutorService.scheduleAtFixedRate(new ViewPageTask(), 2, 2, TimeUnit.SECONDS);
     }
 
@@ -263,7 +264,7 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
     /**
      * 接收子线程传递过来的数据
      */
-    private Handler mHandler = new Handler(){
+    public  Handler mHandler = new Handler(){
         public void handleMessage(android.os.Message msg) {
             mViewPaper.setCurrentItem(currentItem);
         };
@@ -272,6 +273,8 @@ public class HomeNewsFragment extends BaseFragment implements View.OnClickListen
     public void onStop() {
         super.onStop();
     }
+
+
 
 
 }

@@ -117,7 +117,7 @@
     <string name="conf">确认密码</string>
     <string name="pepswd">请输入密码</string>
     <string name="password">密码</string>
-    <string name="pea">请输入帐号</string>
+    <string name="pea">请输入8位学号，如20163289</string>
     <string name="account">帐号</string>
     <string name="name">姓名</string>
     <string name="pchead">请点击图片上传\t真实头像</string>

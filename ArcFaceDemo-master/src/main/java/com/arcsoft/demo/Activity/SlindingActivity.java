@@ -49,15 +49,16 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
     private TextView nickText;
     private TextView signatureText;
     private NimUserInfo userInfo;
+
+    public static String datas;
     public static void start(Context context, String account) {
         Intent intent = new Intent();
         intent.setClass(context, SlindingActivity.class);
         intent.putExtra(Extras.EXTRA_ACCOUNT, account);
-        userID=account;
+        userID=account.substring(0,account.lastIndexOf("9078542437"));
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,11 +91,11 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
         initFragment();
         setRadioGroupListener();
         View layoutHeader = findViewById(R.id.header);
-
         userHead =headerView.findViewById(R.id.head);
         Log.e("SLIDing","step1"+userHead);
         nickText = headerView.findViewById(R.id.username);
         signatureText =headerView. findViewById(R.id.qianmm);
+
     }
     @Override
     protected void onResume() {
@@ -133,8 +134,6 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
             signatureText.setText(userInfo.getSignature());
         }
     }
-
-
     //几个大的Fragment的切换
     private void initFragment() {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
@@ -160,6 +159,7 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
             radioButton.setChecked(true);
         }
     }
+
     private void setIndexSelected(int index) {
         if (mIndex == index) {
             return;
@@ -178,7 +178,6 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
         //再次赋值
         mIndex = index;
     }
-
     //底部几个单选按钮
     public void setRadioGroupListener() {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -214,7 +213,6 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
             }
         });
     }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -225,13 +223,9 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
-
     public void setHandler(Handler handler) {
         mHandler = handler;
     }
-
     //返回按钮，我也不知道
     @Override
     public void onBackPressed() {
@@ -304,6 +298,9 @@ public class SlindingActivity extends AppCompatActivity implements NavigationVie
         this.finish();
         return super.onKeyUp(keyCode, event);
     }
+
+
+
 }
 
 

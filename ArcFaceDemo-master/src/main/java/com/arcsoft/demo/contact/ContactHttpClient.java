@@ -70,7 +70,7 @@ public class ContactHttpClient {
      * 向应用服务器创建账号（注册账号）
      * 由应用服务器调用WEB SDK接口将新注册的用户数据同步到云信服务器
      */
-    public void register(String account, String nickName, String password, final ContactHttpCallback<Void> callback) {
+    public void register(String account, String nickName, String password,final ContactHttpCallback<Void> callback) {
         String url = DemoServers.apiServer() + API_NAME_REGISTER;
         password = MD5.getStringMD5(password);
         try {

@@ -14,8 +14,6 @@ public class CommitCourseAsyntask extends AsyncTask<Void,Integer,String>{
     Context context;
     String postdatas;//提交信息
     String url="";//url
-//	MyAdapter adapter; //自定义Adapter
-
     public CommitCourseAsyntask(Context context, String string) {
         super();
         this.context = context;

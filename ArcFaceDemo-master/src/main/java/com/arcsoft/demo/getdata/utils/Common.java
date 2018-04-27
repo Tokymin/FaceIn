@@ -66,7 +66,6 @@ public class Common {
                 // 获取响应的输入流对象
                 InputStream is = mHttpURLConnection.getInputStream();
                 BufferedReader br=new BufferedReader(new InputStreamReader(is,"UTF-8"));
-
                 String msg=br.readLine();
                 is.close();
                 br.close();

@@ -47,7 +47,7 @@ import io.fabric.sdk.android.Fabric;
 public class Application extends android.app.Application {
 	public static String path;
 	private final String TAG = this.getClass().toString();
-	FaceDB mFaceDB;
+	public FaceDB mFaceDB;
 	Uri mImage;
 	String user;
 
